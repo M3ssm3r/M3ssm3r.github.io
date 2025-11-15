@@ -168,38 +168,39 @@
         </div>
     </div>
     
-    <script src="projects.js"></script>
+    <!-- Сначала загружаем данные -->
+    <script src="projects.js"></script> 
+    
+    <!-- А ТОЛЬКО ПОТОМ запускаем скрипт, который их использует -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('project-grid');
-            if (grid && window.PROJECTS) {
-                window.PROJECTS.forEach(project => {
-                    const circle = document.createElement('a');
-                    circle.href = project.url;
-                    circle.target = '_blank';
-                    circle.className = 'project-circle';
-                    
-                    const title = document.createElement('h3');
-                    title.textContent = project.title;
-                    
-                    const description = document.createElement('p');
-                    description.textContent = project.description;
-                    
-                    circle.appendChild(title);
-                    circle.appendChild(description);
-                    grid.appendChild(circle);
-                });
-            }
-        });
+        // Убрали 'DOMContentLoaded', чтобы скрипт ждал загрузки projects.js
+        const grid = document.getElementById('project-grid');
+        if (grid && window.PROJECTS) {
+            window.PROJECTS.forEach(project => {
+                const circle = document.createElement('a');
+                circle.href = project.url;
+                circle.target = '_blank';
+                circle.className = 'project-circle';
+                
+                const title = document.createElement('h3');
+                title.textContent = project.title;
+                
+                const description = document.createElement('p');
+                description.textContent = project.description;
+                
+                circle.appendChild(title);
+                circle.appendChild(description);
+                grid.appendChild(circle);
+            });
+        }
 
+        // --- Код для анимации (остается без изменений) ---
         const canvas = document.getElementById('lava-canvas');
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
-
         let particles = [];
         const particleCount = 50;
-
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
@@ -209,12 +210,10 @@
                 this.radius = Math.random() * 3 + 1;
                 this.alpha = Math.random() * 0.5 + 0.5;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
                 this.alpha -= 0.01;
-
                 if (this.alpha <= 0) {
                     this.x = Math.random() * width;
                     this.y = height + Math.random() * 100;
@@ -222,7 +221,6 @@
                     this.alpha = Math.random() * 0.5 + 0.5;
                 }
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -232,13 +230,11 @@
                 ctx.fill();
             }
         }
-
         function init() {
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
         }
-
         function animate() {
             ctx.clearRect(0, 0, width, height);
             particles.forEach(p => {
@@ -247,12 +243,10 @@
             });
             requestAnimationFrame(animate);
         }
-        
         window.addEventListener('resize', () => {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         });
-
         init();
         animate();
     </script>
