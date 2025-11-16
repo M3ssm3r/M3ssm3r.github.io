@@ -1,4 +1,4 @@
-const PROJECTS = [
+const window.PROJECTS = [
     {
         title: "GitHub Profile",
         description: "The main forge. Source code, commit history, and technical documentation for all protocols.",
